@@ -1,0 +1,31 @@
+{% set successMessages = app.flashes('success') %}
+{% if successMessages is not empty %}
+    <div class="container text-center" id="success-alert-container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {% for message in successMessages %}
+                        <p style="padding: 0; margin: 0">{{ message }}</p>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% set errorMessages = app.flashes('error') %}
+{% if errorMessages is not empty %}
+    <div class="container text-center" id="error-alert-container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {% for message in errorMessages %}
+                        <p style="padding: 0; margin: 0">{{ message }}</p>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

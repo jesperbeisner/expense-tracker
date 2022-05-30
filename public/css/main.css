@@ -1,0 +1,11 @@
+body {
+    background-color: #4e6c78;
+}
+
+.nav-link-color {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.nav-link-color:hover {
+    color: rgba(255, 255, 255, 1);
+}
