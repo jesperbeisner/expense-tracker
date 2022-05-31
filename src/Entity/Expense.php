@@ -48,6 +48,17 @@ class Expense
         $this->created = new DateTime();
     }
 
+    public function updateDueDateTime(): void
+    {
+        $date = new DateTime();
+
+        $this->dueDate->setTime(
+            (int) $date->format('H'),
+            (int) $date->format('i'),
+            (int) $date->format('s'),
+        );
+    }
+
     public function getId(): int
     {
         return $this->id;

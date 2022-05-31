@@ -20,20 +20,17 @@ class IndexController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $form = $this->createForm(ExpenseType::class, new Expense());
+        $form = $this->createForm(ExpenseType::class, $expense = new Expense());
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var User $user */
             $user = $this->getUser();
 
-            /** @var Expense $data */
-            $data = $form->getData();
-            $data->setUser($user);
+            $expense->setUser($user);
+            $expense->updateDueDateTime();
 
-            $this->updateDueDateTime($data);
-
-            $entityManager->persist($data);
+            $entityManager->persist($expense);
             $entityManager->flush();
 
             $this->addFlash('success', 'The expense was added successfully');
@@ -44,20 +41,5 @@ class IndexController extends AbstractController
         return $this->renderForm('index/index.html.twig', [
             'form' => $form,
         ]);
-    }
-
-    // Fast workaround
-    public function updateDueDateTime(Expense $expense): void
-    {
-        $dueDate = $expense->getDueDate();
-        $created = $expense->getCreated();
-
-        $hour = (int) $created->format('H');
-        $minute = (int) $created->format('i');
-        $second = (int) $created->format('s');
-
-        $dueDate->setTime($hour, $minute, $second);
-
-        $expense->setDueDate($dueDate);
     }
 }
