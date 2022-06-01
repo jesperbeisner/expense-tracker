@@ -25,7 +25,7 @@ class CategoryType extends AbstractType
                 'constraints' => [
                     new Assert\Length(
                         min: 1,
-                        max: 10,
+                        max: 255,
                         minMessage: 'category.name.min.length',
                         maxMessage: 'category.name..max.length'
                     ),
