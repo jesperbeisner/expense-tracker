@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% trans %}navigation.edit.expense{% endtrans %} - {{ parent() }}{% endblock %}
+{% block title %}{% trans %}navigation.edit.fixed_costs{% endtrans %} - {{ parent() }}{% endblock %}
 
 {% block body %}
     <div class="container">
@@ -9,7 +9,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h5>
-                            {% trans %}template.expense.edit.edit.expense{% endtrans %}
+                            {% trans %}template.fixed_cost.edit.edit.fixed_costs{% endtrans %}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -29,12 +29,6 @@
                         <div class="row mt-3">
                             <div class="col-md-12">
                                 {{ form_row(form.note) }}
-                            </div>
-                        </div>
-
-                        <div class="row mt-3">
-                            <div class="col-md-12">
-                                {{ form_row(form.dueDate) }}
                             </div>
                         </div>
 

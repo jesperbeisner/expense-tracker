@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class CategoryType extends AbstractType
 {
@@ -17,13 +18,21 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Name',
+                'label' => 'form.name',
                 'attr' => ['class' => 'form-control'],
                 'label_attr' => ['class' => 'form-label'],
                 'required' => true,
+                'constraints' => [
+                    new Assert\Length(
+                        min: 1,
+                        max: 10,
+                        minMessage: 'category.name.min.length',
+                        maxMessage: 'category.name..max.length'
+                    ),
+                ],
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Submit',
+                'label' => 'form.save',
                 'attr' => ['class' => 'btn btn-primary'],
             ])
         ;

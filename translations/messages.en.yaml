@@ -1,0 +1,3 @@
+category:
+    added.successfully: "The category '%category%' was added successfully"
+    already.exists: "A category with the name '%category%' already exists"

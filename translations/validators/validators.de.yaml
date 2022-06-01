@@ -1,0 +1,4 @@
+password.min.length: "Das Passwort muss mindestens 10 Zeichen lang sein"
+password.max.length: "Übertreib mal nicht mit der Länge Kumpel"
+category.name.min.length: "Der Name für eine Kategorie muss aus mindestens einem Zeichen bestehen"
+category.name..max.length: "Der Name für eine Kategorie darf aus maximal 255 Zeichen bestehen"

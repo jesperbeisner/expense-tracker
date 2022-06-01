@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Repository\FixedCostRepository;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CategoryRepository::class)]
-#[ORM\Table(name: 'categories')]
-#[ORM\UniqueConstraint(columns: ['user_id', 'name'])]
-class Category
+#[ORM\Entity(repositoryClass: FixedCostRepository::class)]
+#[ORM\Table(name: 'fixed_costs')]
+class FixedCost
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -23,8 +22,15 @@ class Category
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $user;
 
-    #[ORM\Column(type: Types::STRING)]
-    private string $name;
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?Category $category = null;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $amount;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $note = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private DateTime $created;
@@ -37,16 +43,6 @@ class Category
         $this->created = new DateTime();
     }
 
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): void
-    {
-        $this->user = $user;
-    }
-
     public function getId(): int
     {
         return $this->id;
@@ -57,14 +53,44 @@ class Category
         $this->id = $id;
     }
 
-    public function getName(): string
+    public function getUser(): User
     {
-        return $this->name;
+        return $this->user;
     }
 
-    public function setName(string $name): void
+    public function setUser(User $user): void
     {
-        $this->name = $name;
+        $this->user = $user;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): void
+    {
+        $this->category = $category;
+    }
+
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(int $amount): void
+    {
+        $this->amount = $amount;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): void
+    {
+        $this->note = $note;
     }
 
     public function getCreated(): DateTime

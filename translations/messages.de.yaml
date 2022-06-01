@@ -1,0 +1,86 @@
+title: "Ausgaben-Tracker"
+
+controller:
+    expense:
+        added.successfully: "Die Ausgabe wurde erfolgreich hinzugefügt"
+        edited.successfully: "Die Ausgabe wurde erfolgreich bearbeitet"
+        deleted.successfully: "Die Ausgabe wurde erfolgreich gelöscht"
+        not.found: "Die Ausgabe wurde nicht gefunden"
+    category:
+        added.successfully: "Die Kategorie '%category%' wurde erfolgreich hinzugefügt"
+        already.exists: "Eine Kategorie mit dem Namen '%category%' existiert bereits"
+        not.found: "Die Kategorie wurde nicht gefunden"
+        deleted.successfully: "Die Kategorie '%category%' wurde erfolgreich gelöscht"
+    fixed_cost:
+        added.successfully: "Die Fixkosten wurden erfolgreich hinzugefügt"
+        deleted.successfully: "Die Fixkosten wurden erfolgreich gelöscht"
+        edited.successfully: "Die Fixkosten wurden erfolgreich bearbeitet"
+        not.found: "Die Fixkosten wurden nicht gefunden"
+
+# Navigation
+navigation:
+    home: "Home"
+    expenses: "Ausgaben"
+    fixed_costs: "Fixkosten"
+    categories: "Kategorien"
+    settings: "Einstellungen"
+    edit.expense: "Ausgabe bearbeiten"
+    edit.fixed_costs: "Fixkosten bearbeiten"
+    edit.categories: "Kategorie bearbeiten"
+
+# Forms
+form:
+    amount: "Kosten"
+    categories: "Kategorie"
+    note: "Notizen"
+    due_date: "Fälligkeitsdatum"
+    name: "Name"
+    save: "Speichern"
+    password1: "Passwort"
+    password2: "Passwort wiederholen"
+
+# Templates
+template:
+    index:
+        index:
+            add.expense: "Ausgabe hinzufügen"
+    expense:
+        index:
+            expenses: "Ausgaben"
+            expenses.not.available: "Noch keine Ausgaben vorhanden"
+            amount: "Kosten"
+            category: "Kategorie"
+            due_date: "Fälligkeitsdatum"
+            note: "Notizen"
+            delete.expense: "Ausgabe löschen"
+            edit.expense: "Ausgabe bearbeiten"
+            delete.expense.info: "Die Löschung kann nicht rückgängig gemacht werden"
+            close: "Schließen"
+            delete: "Löschen"
+        edit:
+            edit.expense: "Ausgabe bearbeiten"
+    category:
+        index:
+            categories: "Kategorien"
+            add.category: "Kategorie hinzufügen"
+            no.category.available: "Es sind noch keine Kategorien vorhanden"
+    fixed_cost:
+        index:
+            fixed_costs: "Fixkosten"
+            add.fixed_costs: "Fixkosten hinzufügen"
+            no.fixed_costs.available: "Es sind noch keine Fixkosten vorhanden"
+            amount: "Kosten"
+            category: "Kategorie"
+            note: "Notizen"
+            close: "Schließen"
+            delete: "Löschen"
+            edit: "Bearbeiten"
+            delete.fixed_cost: "Fixkosten löschen"
+            delete.fixed_cost.info: "Die Löschung kann nicht rückgängig gemacht werden"
+        edit:
+            edit.fixed_costs: "Fixkosten bearbeiten"
+    security:
+        login:
+            email: "E-Mail"
+            password: "Passwort"
+            email.or.password.wrong: "E-Mail oder Passwort falsch"

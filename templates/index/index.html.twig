@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home - {{ parent() }}{% endblock %}
+{% block title %}{% trans %}navigation.home{% endtrans %} - {{ parent() }}{% endblock %}
 
 {% block body %}
     <div class="container">
@@ -9,7 +9,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h5>
-                            Add an expense
+                            {% trans %}template.index.index.add.expense{% endtrans %}
                         </h5>
                     </div>
                     <div class="card-body">

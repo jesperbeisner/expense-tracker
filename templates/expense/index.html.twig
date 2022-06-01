@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Expenses - {{ parent() }}{% endblock %}
+{% block title %}{% trans %}navigation.expenses{% endtrans %} - {{ parent() }}{% endblock %}
 
 {% block body %}
     <div class="container">
@@ -9,50 +9,61 @@
                 <div class="card">
                     <div class="card-header">
                         <h5>
-                            Expenses
+                            {% trans %}template.expense.index.expenses{% endtrans %}: {{ amount|amount }}
                         </h5>
                     </div>
                     <div class="card-body">
-                        {% if expenses is empty %}
-                            <p class="text-center text-danger">No expenses available yet</p>
+                        {% if expenses|length == 0 %}
+                            <p class="text-center text-danger">{% trans %}template.expense.index.expenses.not.available{% endtrans %}</p>
                         {% else %}
                             <div class="table-responsive">
                                 <table class="table table-hover text-center">
                                     <thead>
                                     <tr>
                                         <th scope="col" style="width: 10%">#</th>
-                                        <th scope="col" style="width: 10%">Amount</th>
-                                        <th scope="col" style="width: 10%">Category</th>
-                                        <th scope="col" style="width: 10%">Due Date</th>
-                                        <th scope="col" style="width: 50%">Note</th>
-                                        <th scope="col" style="width: 10%">Action</th>
+                                        <th scope="col" style="width: 10%">
+                                            {% trans %}template.expense.index.amount{% endtrans %}
+                                        </th>
+                                        <th scope="col" style="width: 20%">
+                                            {% trans %}template.expense.index.category{% endtrans %}
+                                        </th>
+                                        <th scope="col" style="width: 10%">
+                                            {% trans %}template.expense.index.due_date{% endtrans %}
+                                        </th>
+                                        <th scope="col" style="width: 44%">
+                                            {% trans %}template.expense.index.note{% endtrans %}
+                                        </th>
+                                        <th scope="col" style="width: 3%"></th>
+                                        <th scope="col" style="width: 3%"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% set i = 1 %}
+                                    {% set i = expenses|length %}
                                     {% for expense in expenses %}
                                         <tr>
-                                            <th scope="row" style="width: 10%">{{ i }}</th>
-                                            <td style="width: 10%">{{ expense.amount|amount }}</td>
-                                            <td style="width: 10%">{{ expense.category.name ?? '-' }}</td>
-                                            <td style="width: 10%">{{ expense.dueDate|date('d.m.Y') }}</td>
-                                            <td style="width: 50%">{{ expense.note ?? '-' }}</td>
-                                            <td style="width: 10%">
+                                            <th scope="row">{{ i }}</th>
+                                            <td>{{ expense.amount|amount }}</td>
+                                            <td>{{ expense.category.name ?? '-' }}</td>
+                                            <td>{{ expense.dueDate|date('d.m.Y') }}</td>
+                                            <td>{{ expense.note ?? '-' }}</td>
+                                            <td>
                                                 <a href="{{ path('app_expenses_edit', {'id': expense.id}) }}" class="text-decoration-none">
-                                                    <i title="Edit expense">
+                                                    <i title="{% trans %}template.expense.index.edit.expense{% endtrans %}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-gear-fill edit-icon" viewBox="0 0 16 16">
                                                             <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
                                                         </svg>
                                                     </i>
                                                 </a>
-                                                <i title="Delete expense">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" data-bs-toggle="modal" data-bs-target="#delete-modal" data-expense-id="{{ expense.id }}" fill="currentColor" class="bi bi-trash-fill ms-1 delete-icon" viewBox="0 0 16 16">
+                                            </td>
+                                            <td>
+                                                <i title="{% trans %}template.expense.index.delete.expense{% endtrans %}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" data-bs-toggle="modal" data-bs-target="#delete-modal" data-expense-id="{{ expense.id }}" fill="currentColor" class="bi bi-trash-fill delete-icon" viewBox="0 0 16 16">
                                                         <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                                                     </svg>
                                                 </i>
                                             </td>
                                         </tr>
-                                        {% set i = i + 1 %}
+                                        {% set i = i - 1 %}
                                     {% endfor %}
                                     </tbody>
                                 </table>
@@ -68,16 +79,22 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="delete-modal-label">Delete expense</h5>
+                    <h5 class="modal-title" id="delete-modal-label">
+                        {% trans %}template.expense.index.delete.expense{% endtrans %}
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-center">
-                    Are you sure? The deletion cannot be undone.
+                <div class="modal-body text-center text-danger fw-bold">
+                    {% trans %}template.expense.index.delete.expense.info{% endtrans %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        {% trans %}template.expense.index.close{% endtrans %}
+                    </button>
                     <form id="delete-form" method="POST">
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger">
+                            {% trans %}template.expense.index.delete{% endtrans %}
+                        </button>
                     </form>
                 </div>
             </div>

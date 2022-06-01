@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,8 +24,8 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
-    public function findAllOrderedByName(): array
+    public function findAllByUserAndOrderedByName(User $user): array
     {
-        return $this->findBy([], ['name' => 'ASC']);
+        return $this->findBy(['user' => $user], ['name' => 'ASC']);
     }
 }

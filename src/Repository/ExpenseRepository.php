@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Expense;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,8 +24,25 @@ class ExpenseRepository extends ServiceEntityRepository
         parent::__construct($registry, Expense::class);
     }
 
-    public function findAllOrderedByDueDate(): array
+    public function findAllByUserAndOrderedByDueDate(User $user): array
     {
-        return $this->findBy([], ['dueDate' => 'DESC']);
+        return $this->findBy(['user' => $user], ['dueDate' => 'DESC']);
+    }
+
+    public function getAmountSumByUser(User $user): int
+    {
+        $result = $this->createQueryBuilder('e')
+            ->select('SUM(e.amount)')
+            ->where('e.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        if ($result === null) {
+            return 0;
+        }
+
+        return (int) $result;
     }
 }

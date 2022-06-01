@@ -12,13 +12,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class IndexController extends AbstractController
 {
     #[Route('/', name: 'app_index', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_USER');
 
         $form = $this->createForm(ExpenseType::class, $expense = new Expense());
 
@@ -33,7 +34,7 @@ class IndexController extends AbstractController
             $entityManager->persist($expense);
             $entityManager->flush();
 
-            $this->addFlash('success', 'The expense was added successfully');
+            $this->addFlash('success', new TranslatableMessage('controller.expense.added.successfully'));
 
             return $this->redirectToRoute('app_index');
         }
