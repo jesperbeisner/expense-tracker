@@ -63,7 +63,7 @@ template:
         index:
             categories: "Kategorien"
             add.category: "Kategorie hinzufügen"
-            no.category.available: "Es sind noch keine Kategorien vorhanden"
+            no.categories.available: "Es sind noch keine Kategorien vorhanden"
     fixed_cost:
         index:
             fixed_costs: "Fixkosten"
