@@ -30,6 +30,7 @@ jobs:
   deployment:
     name: Deploy the changes to my server
     runs-on: ubuntu-22.04
+    needs: testing
     steps:
       - name: Run the deployment script
         uses: appleboy/ssh-action@master
