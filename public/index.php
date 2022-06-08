@@ -1,6 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Kernel;
+
+if (file_exists(__DIR__ . '/maintenance.php')) {
+    require __DIR__ . '/maintenance.php';
+    exit();
+}
 
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
