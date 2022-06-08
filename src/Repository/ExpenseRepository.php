@@ -24,6 +24,9 @@ class ExpenseRepository extends ServiceEntityRepository
         parent::__construct($registry, Expense::class);
     }
 
+    /**
+     * @return Expense[]
+     */
     public function findAllByUserAndOrderedByDueDate(User $user): array
     {
         return $this->findBy(['user' => $user], ['dueDate' => 'DESC']);
@@ -31,6 +34,7 @@ class ExpenseRepository extends ServiceEntityRepository
 
     public function getAmountSumByUser(User $user): int
     {
+        /** @var int|string|null $result */
         $result = $this->createQueryBuilder('e')
             ->select('SUM(e.amount)')
             ->where('e.user = :user')

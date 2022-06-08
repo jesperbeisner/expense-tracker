@@ -24,6 +24,9 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
+    /**
+     * @return Category[]
+     */
     public function findAllByUserAndOrderedByName(User $user): array
     {
         return $this->findBy(['user' => $user], ['name' => 'ASC']);

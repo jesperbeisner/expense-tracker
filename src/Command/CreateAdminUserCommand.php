@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Entity\User;
@@ -36,7 +38,10 @@ class CreateAdminUserCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        /** @var string $email */
         $email = $input->getArgument('email');
+
+        /** @var string $password */
         $password = $input->getArgument('password');
 
         /** @var UserRepository $userRepository */

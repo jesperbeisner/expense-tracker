@@ -24,6 +24,9 @@ class FixedCostRepository extends ServiceEntityRepository
         parent::__construct($registry, FixedCost::class);
     }
 
+    /**
+     * @return FixedCost[]
+     */
     public function findAllByUserAndOrderedByAmount(User $user): array
     {
         return $this->findBy(['user' => $user], ['amount' => 'DESC']);
@@ -31,6 +34,7 @@ class FixedCostRepository extends ServiceEntityRepository
 
     public function getAmountSumByUser(User $user): int
     {
+        /** @var int|string|null $result */
         $result = $this->createQueryBuilder('fc')
             ->select('SUM(fc.amount)')
             ->where('fc.user = :user')
