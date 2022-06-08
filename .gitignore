@@ -13,4 +13,4 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
-docker-compose-prod.yml
+docker-compose.prod.yml

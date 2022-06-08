@@ -3,7 +3,7 @@ version: '3.9'
 services:
   web:
     image: caddy:2.5.1-alpine
-    container_name: expense-tracker-web-container
+    container_name: expense-tracker-dev-web-container
     volumes:
       - .:/var/www/html/
       - ./docker/caddy:/etc/caddy/
@@ -12,13 +12,13 @@ services:
 
   php:
     build: ./docker/php
-    container_name: expense-tracker-php-container
+    container_name: expense-tracker-dev-php-container
     volumes:
       - .:/var/www/html/
 
   db:
     image: mysql:8.0-debian
-    container_name: expense-tracker-db-container
+    container_name: expense-tracker-dev-db-container
     ports:
       - "33060:3306"
     environment:
