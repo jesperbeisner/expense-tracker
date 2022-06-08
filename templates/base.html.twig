@@ -27,15 +27,9 @@
     {% block body %}{% endblock %}
 </main>
 
-<footer class="mt-5">
-    <div class="container">
-        <p class="text-center">
-            <a class="text-decoration-none commit-link" href="https://github.com/jesperbeisner/expense-tracker/tree/{{ git_info() }}">
-                {{ git_info() }}
-            </a>
-        </p>
-    </div>
-</footer>
+{% if app.user is not null %}
+    {% include 'layout/footer.html.twig' %}
+{% endif %}
 
 {% block javascript_end %}
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>

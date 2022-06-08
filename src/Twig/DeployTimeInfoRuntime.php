@@ -4,32 +4,31 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
+use DateTime;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
-class GitInfoRuntime implements RuntimeExtensionInterface
+class DeployTimeInfoRuntime implements RuntimeExtensionInterface
 {
-    private const INIT_COMMIT = 'a9f8b20d780a11c586f11fc29e74a8c3fe01eab7';
-
     public function __construct(
         private readonly ParameterBagInterface $parameterBag
     ) {}
 
-    public function getGitInfo(): string
+    public function getDeployTimeInfo(): string
     {
         /** @var string $projectDir */
         $projectDir = $this->parameterBag->get('kernel.project_dir');
 
-        $filePath = $projectDir . '/git-info.txt';
+        $filePath = $projectDir . '/deploy-time.txt';
 
         if (file_exists($filePath)) {
-            if (false === $currentCommit = file_get_contents($filePath)) {
-                return self::INIT_COMMIT;
+            if (false === $deployTimeInfo = file_get_contents($filePath)) {
+                return (new DateTime())->format('YmdHis');
             }
 
-            return trim($currentCommit);
+            return trim($deployTimeInfo);
         }
 
-        return self::INIT_COMMIT;
+        return (new DateTime())->format('YmdHis');
     }
 }
