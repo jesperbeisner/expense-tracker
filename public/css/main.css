@@ -27,3 +27,11 @@ body {
     color: rgba(255, 0, 0, 1);
     cursor: pointer;
 }
+
+.commit-link {
+    color: rgba(0, 0, 0, .5);
+}
+
+.commit-link:hover {
+    color: rgba(0, 0, 0, 1);
+}
