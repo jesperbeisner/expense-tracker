@@ -23,12 +23,12 @@ class DeployTimeInfoRuntime implements RuntimeExtensionInterface
 
         if (file_exists($filePath)) {
             if (false === $deployTimeInfo = file_get_contents($filePath)) {
-                return (new DateTime())->format('YmdHis');
+                return (new DateTime())->format('Y-m-d_H:i:s');
             }
 
             return trim($deployTimeInfo);
         }
 
-        return (new DateTime())->format('YmdHis');
+        return (new DateTime())->format('Y-m-d_H:i:s');
     }
 }
