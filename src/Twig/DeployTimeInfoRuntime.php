@@ -26,7 +26,7 @@ class DeployTimeInfoRuntime implements RuntimeExtensionInterface
                 return (new DateTime())->format('Y-m-d_H:i:s');
             }
 
-            return trim($deployTimeInfo);
+            return (new DateTime(trim($deployTimeInfo)))->format('Y-m-d_H:i:s');
         }
 
         return (new DateTime())->format('Y-m-d_H:i:s');
