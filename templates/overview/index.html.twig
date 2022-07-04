@@ -45,7 +45,7 @@
         <script>
           const ctx = document.getElementById('expense-chart').getContext('2d');
           const myChart = new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
               labels: {{ data['categories']|json_encode|raw }},
               datasets: [{
