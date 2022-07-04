@@ -27,6 +27,8 @@ navigation:
     edit.expense: "Ausgabe bearbeiten"
     edit.fixed_costs: "Fixkosten bearbeiten"
     edit.categories: "Kategorie bearbeiten"
+    change_password: "Passwort ändern"
+    overview: "Übersicht"
 
 # Forms
 form:

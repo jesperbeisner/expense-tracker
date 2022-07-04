@@ -6,8 +6,10 @@ namespace App\Repository;
 
 use App\Entity\Expense;
 use App\Entity\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Expense>
@@ -48,5 +50,33 @@ class ExpenseRepository extends ServiceEntityRepository
         }
 
         return (int) $result;
+    }
+
+    /**
+     * @return array<array-key, array<string, int|string|null>>
+     */
+    public function getMonthlyExpenses(UserInterface $user, int $year, int $month): array
+    {
+        $startDate = new DateTime("$year-$month-01");
+
+        $endDate = new DateTime("$year-$month-01");
+        $endDate->modify('+1 month');
+
+        /** @var array<array-key, array<string, int|string|null>> $result */
+        $result = $this->createQueryBuilder('e')
+            ->select('SUM(e.amount) AS amount, c.name AS category')
+            ->leftJoin('e.category', 'c')
+            ->where('e.user = :user')
+            ->andWhere('e.created > :startDate')
+            ->andWhere('e.created < :endDate')
+            ->groupBy('c.name')
+            ->setParameter('user', $user)
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return $result;
     }
 }

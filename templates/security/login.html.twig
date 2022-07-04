@@ -1,8 +1,17 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - {% trans %}title{% endtrans %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" sizes="16x16">
 
-{% block title %}Login - {{ parent() }}{% endblock %}
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+</head>
+<body>
 
-{% block body %}
+<main>
     <div class="container">
         <div class="row mt-5 text-center text-white">
             <div class="col-md-12">
@@ -40,4 +49,8 @@
             </div>
         </div>
     </div>
-{% endblock %}
+</main>
+
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

@@ -35,3 +35,13 @@ body {
 .commit-link:hover {
     color: rgba(0, 0, 0, 1);
 }
+
+.chart-container {
+    min-height: 250px;
+}
+
+@media (min-width: 1080px) {
+    .chart-container {
+        min-height: 650px;
+    }
+}

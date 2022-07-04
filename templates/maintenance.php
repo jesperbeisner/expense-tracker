@@ -11,6 +11,9 @@
         <h1 style="text-align: center">
             Maintenance mode
         </h1>
+        <p>
+            Please try again later.
+        </p>
     </main>
 </body>
 </html>

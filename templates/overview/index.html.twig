@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}navigation.fixed_costs{% endtrans %} - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <a class="btn btn-primary btn-sm" href="{{ path('app_overview', {year: 2022, month: 6}) }}">
+                                    Juni
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a class="btn btn-primary btn-sm" href="{{ path('app_overview', {year: 2022, month: 7}) }}">
+                                    Juli
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% if data['categories'] is defined and data['categories'] is not empty %}
+                            <div class="chart-container mb-3">
+                                <canvas id="expense-chart"></canvas>
+                            </div>
+                        {% else %}
+                            <p class="text-center p-2 m-0 fw-bold">
+                                No data available for this month
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript_end %}
+    {{ parent() }}
+    <script src="{{ asset('js/chartjs.min.js') }}"></script>
+    {% if data['categories'] is defined and data['categories'] is not empty %}
+        <script>
+          const ctx = document.getElementById('expense-chart').getContext('2d');
+          const myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: {{ data['categories']|json_encode|raw }},
+              datasets: [{
+                data: {{ data['amounts']|json_encode|raw }},
+                backgroundColor: {{ data['background_colors']|json_encode|raw }},
+                borderColor: {{ data['border_colors']|json_encode|raw }},
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: {
+                legend: {
+                  position: 'top',
+                },
+                title: {
+                  display: true,
+                  text: '{{ data['total'] }}'
+                }
+              },
+              maintainAspectRatio: false,
+            }
+          });
+        </script>
+    {% endif %}
+{% endblock %}
