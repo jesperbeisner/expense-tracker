@@ -3,34 +3,54 @@
 {% block title %}{% trans %}navigation.fixed_costs{% endtrans %} - {{ parent() }}{% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container" x-data="main">
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <div class="row text-center">
-                            <div class="col-6">
-                                <a class="btn btn-primary btn-sm" href="{{ path('app_overview', {year: 2022, month: 6}) }}">
-                                    Juni
-                                </a>
+                        <div class="row">
+                            <div class="col-6 text-end">
+                                {% set month = "now"|date('m') %}
+                                <select x-ref="monthSelect" @change="updateChart" name="month" id="month" class="form-select">
+                                    <option value="1" {{ month == '01' ? 'selected' : '' }}>Januar</option>
+                                    <option value="2" {{ month == '02' ? 'selected' : '' }}>Februar</option>
+                                    <option value="3" {{ month == '03' ? 'selected' : '' }}>März</option>
+                                    <option value="4" {{ month == '04' ? 'selected' : '' }}>April</option>
+                                    <option value="5" {{ month == '05' ? 'selected' : '' }}>Mai</option>
+                                    <option value="6" {{ month == '06' ? 'selected' : '' }}>Juni</option>
+                                    <option value="7" {{ month == '07' ? 'selected' : '' }}>Juli</option>
+                                    <option value="8" {{ month == '08' ? 'selected' : '' }}>August</option>
+                                    <option value="9" {{ month == '09' ? 'selected' : '' }}>September</option>
+                                    <option value="10" {{ month == '10' ? 'selected' : '' }}>Oktober</option>
+                                    <option value="11" {{ month == '11' ? 'selected' : '' }}>November</option>
+                                    <option value="12" {{ month == '12' ? 'selected' : '' }}>Dezember</option>
+                                </select>
                             </div>
                             <div class="col-6">
-                                <a class="btn btn-primary btn-sm" href="{{ path('app_overview', {year: 2022, month: 7}) }}">
-                                    Juli
-                                </a>
+                                {% set year = "now"|date('Y') %}
+                                <select x-ref="yearSelect" @change="updateChart" name="year" id="year" class="form-select">
+                                    <option value="2022" {{ year == '2022' ? 'selected' : '' }}>2022</option>
+                                    <option value="2023" {{ year == '2023' ? 'selected' : '' }}>2023</option>
+                                    <option value="2024" {{ year == '2024' ? 'selected' : '' }}>2024</option>
+                                    <option value="2025" {{ year == '2025' ? 'selected' : '' }}>2025</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        {% if data['categories'] is defined and data['categories'] is not empty %}
-                            <div class="chart-container mb-3">
-                                <canvas id="expense-chart"></canvas>
+                        <div class="text-center">
+                            <div x-show="showLoadingSpinner" class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
                             </div>
-                        {% else %}
-                            <p class="text-center p-2 m-0 fw-bold">
-                                No data available for this month
-                            </p>
-                        {% endif %}
+                        </div>
+
+                        <div x-cloak x-show="showChartContainer" class="chart-container mb-3">
+                            <canvas id="expense-chart"></canvas>
+                        </div>
+
+                        <p x-cloak x-show="showNoDataParagraph" id="no-data-paragraph" class="text-center p-2 m-0 fw-bold">
+                            Keine Ausgaben für diesen Monat vorhanden
+                        </p>
                     </div>
                 </div>
             </div>
@@ -41,33 +61,87 @@
 {% block javascript_end %}
     {{ parent() }}
     <script src="{{ asset('js/chartjs.min.js') }}"></script>
-    {% if data['categories'] is defined and data['categories'] is not empty %}
-        <script>
-          const ctx = document.getElementById('expense-chart').getContext('2d');
-          const myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-              labels: {{ data['categories']|json_encode|raw }},
-              datasets: [{
-                data: {{ data['amounts']|json_encode|raw }},
-                backgroundColor: {{ data['background_colors']|json_encode|raw }},
-                borderColor: {{ data['border_colors']|json_encode|raw }},
-                borderWidth: 1
-              }]
-            },
-            options: {
-              plugins: {
-                legend: {
-                  position: 'top',
-                },
-                title: {
-                  display: true,
-                  text: '{{ data['total'] }}'
-                }
+
+    <script>
+      document.addEventListener('alpine:init', () => {
+        Alpine.data('main', () => ({
+          init() {
+            this.updateChart();
+          },
+
+          showLoadingSpinner: true,
+          showChartContainer: false,
+          showNoDataParagraph: false,
+
+          updateChart() {
+            const month = this.$refs.monthSelect.value;
+            const year = this.$refs.yearSelect.value;
+
+            this.fetchChartData(month, year);
+          },
+          fetchChartData(month, year) {
+            this.showNoDataParagraph = false;
+            this.showChartContainer = false;
+            this.showLoadingSpinner = true;
+
+            fetch('/api/expense-chart-data', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
               },
-              maintainAspectRatio: false,
+              body: JSON.stringify({month: month, year: year})
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data['total'] === 0) {
+                  this.showNoDataParagraph = true;
+                  this.showChartContainer = false;
+                } else {
+                  const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+                  const monthString = monthNames[month - 1]
+
+                  chart.options.plugins.title.text = 'Ausgaben für ' + monthString + ' ' + year + ': ' + data['total'] + ' €';
+                  chart.data.labels = data['categories'];
+                  chart.data.datasets[0].data = data['amounts'];
+
+                  chart.update();
+
+                  this.showNoDataParagraph = false;
+                  this.showChartContainer = true;
+                }
+
+                this.showLoadingSpinner = false;
+              });
+          }
+        }));
+
+        const ctx = document.getElementById('expense-chart').getContext('2d');
+        const chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Placeholder'],
+            datasets: [{
+              label: '{% trans %}Ausgaben{% endtrans %}',
+              data: [1],
+              backgroundColor: "rgba(255, 0, 0, 0.4)",
+              borderColor: "rgba(255, 0, 0, 0.9)",
+              borderWidth: 1
+            }]
+          },
+          options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Placeholder'
+              }
             }
-          });
-        </script>
-    {% endif %}
+          }
+        });
+      })
+    </script>
 {% endblock %}

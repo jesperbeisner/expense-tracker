@@ -7,42 +7,62 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\ExpenseRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\JsonException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class OverviewController extends AbstractController
 {
-    #[Route('/overview/{year}/{month}', name: 'app_overview', methods: ['GET'])]
-    public function index(int $year, int $month, ExpenseRepository $expenseRepository): Response
+    #[Route('/overview', name: 'app_overview', methods: ['GET'])]
+    public function index(): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        return $this->render('overview/index.html.twig');
+    }
+
+    #[Route('/api/expense-chart-data', name: 'app_expense_chart_data', methods: ['POST'])]
+    public function expenseChartData(Request $request, ExpenseRepository $expenseRepository): JsonResponse
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         /** @var User $user */
         $user = $this->getUser();
 
-        $expenses = $expenseRepository->getMonthlyExpenses($user, $year, $month);
+        try {
+            $requestData = $request->toArray();
+        } catch (JsonException $e) {
+            return new JsonResponse([
+                'status' => 'Failure',
+                'message' => 'No valid request body'
+            ], 400);
+        }
 
-        $data = ['total' => 0];
+        $month = $requestData['month'] ?? null;
+        $year = $requestData['year'] ?? null;
+
+        if ($month === null || $year === null) {
+            return new JsonResponse([
+                'status' => 'Failure',
+                'message' => 'No valid request body'
+            ], 400);
+        }
+
+        $expenses = $expenseRepository->getMonthlyExpenses($user, (int) $year, (int) $month);
+
+        $data = ['categories' => [], 'amounts' => [], 'total' => 0];
         foreach ($expenses as $expense) {
-            $data['categories'][] = $expense['category'] ?? 'Unknown';
-            $data['amounts'][] = number_format((int) $expense['amount'] / 100, 2);
-            $data['total'] += $expense['amount'];
-
-            $r = rand(0, 255);
-            $g = rand(0, 255);
-            $b = rand(0, 255);
-
-            $data['background_colors'][] = "rgba($r, $g, $b, 0.2)";
-            $data['border_colors'][] = "rgba($r, $g, $b, 1)";
+            $data['categories'][] = $expense['category'] ?? 'Unbekannt';
+            $data['amounts'][] = round((int) $expense['amount'] / 100, 2);
+            $data['total'] += (int) $expense['amount'];
         }
 
-        if ($data['total'] > 0) {
-            $monthText = $month === 6 ? 'Juni' : 'Juli';
-            $data['total'] = "Ausgaben für $monthText 2022: " . number_format((int) $data['total'] / 100, 2, ',', '.') . ' €';;
+        if ($data['total'] !== 0) {
+            $data['total'] = round($data['total'] / 100, 2);
         }
 
-        return $this->renderForm('overview/index.html.twig', [
-            'data' => $data,
-        ]);
+        return $this->json($data);
     }
 }

@@ -1,4 +1,4 @@
-{% set invalidateCache = 'tg35123rt3f3fg' %}
+{% set invalidateCache = 'tg35123rt3f3fg1' %}
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -12,7 +12,9 @@
         <link href="{{ asset('css/main.css') }}?invalidate-cache={{ invalidateCache }}" rel="stylesheet">
     {% endblock %}
 
-    {% block javascript_start %}{% endblock %}
+    {% block javascript_start %}
+        <script defer src="{{ asset('js/alpinejs.min.js') }}?invalidate-cache={{ invalidateCache }}"></script>
+    {% endblock %}
 </head>
 <body>
 
