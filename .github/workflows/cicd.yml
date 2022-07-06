@@ -41,4 +41,4 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script_stop: true
-          script: /bin/bash deployments/expense-tracker.sh
+          script: /bin/bash ~/deployments/scripts/expense-tracker.sh
